@@ -449,10 +449,20 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+      // var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+      // var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      // document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+
+
+      // Modified as follows
+      var dx = determineDx(document.querySelector(".randomPizzaContainer"), size);
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer").offsetWidth + dx) + 'px';
+
+      if (dx != 0) {
+        for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+          document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+        }
     }
   }
 
@@ -501,9 +511,18 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  // Replace with a more efficient access to the class Mover
+  // var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
+
+  // Calculate scrollTop outside the loop
+  var scrollTop = document.body.scrollTop / 1250;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    // Use precalculated mod value
+    // var phase = Math.sin(scrollTop + (i % 5));
+    var phase = Math.sin(scrollTop + items[i].mod);
+
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -524,7 +543,9 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+
+  // Reduced the number of moving pizza drawn to 50
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -533,6 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
+    elem.mod = (i % 5);
   }
   updatePositions();
 });
