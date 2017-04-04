@@ -503,6 +503,7 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
+// Remaining code moved to movingpizza.js
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
@@ -516,15 +517,35 @@ function updatePositions() {
   var items = document.getElementsByClassName('mover');
 
   // Calculate scrollTop outside the loop
-  var scrollTop = document.body.scrollTop / 1250;
-  for (var i = 0; i < items.length; i++) {
+  var basePosition = document.body.scrollTop / 1250;
+  var updateWorker = new Worker ('views/js/updateworker.js');
+  updateWorker.postMessage(items);
+
+  updateWorker.onmessage = function(e) {
+    var newItems = e.data;
+    if (newItems) {
+      return e.data;
+    } else {
+      console.log('Items Error');
+    }
+  }
+
+  updateWorker.onerror = function(error){
+    function workerException() {
+      this.name = 'workerException';
+      this.messsage = message;
+    }
+    throw new workerException('Worker Error');
+  }
+
+  // for (var i = 0; i < items.length; i++) {
     // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
     // Use precalculated mod value
     // var phase = Math.sin(scrollTop + (i % 5));
-    var phase = Math.sin(scrollTop + items[i].mod);
 
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  }
+    // var phase = Math.sin(basePosition + items[i].mod);
+    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  // }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -543,9 +564,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-
-  // Reduced the number of moving pizza drawn to 50
-  for (var i = 0; i < 50; i++) {
+  // Calculate how many pizzas have to be created based on viewport height and each row containing at max col# of pizzas
+  for (var i = 0; i < cols*window.innerHeight/s; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -553,8 +573,12 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    // document.querySelector("#movingPizzas1").appendChild(elem);
+    // Using getElementsById instead of querySelector
+    document.getElementById('movingPizzas1').appendChild(elem);
+    // Calculating i mod 5 which is used in updatePositions() function
     elem.mod = (i % 5);
   }
-  updatePositions();
+  // Deleted reference to updatePositions(), which here does not seem necessary here
+  // updatePositions();
 });
