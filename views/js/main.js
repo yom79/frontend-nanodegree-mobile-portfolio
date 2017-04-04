@@ -515,10 +515,12 @@ function updatePositions() {
   // Replace with a more efficient access to the class Mover
   // var items = document.querySelectorAll('.mover');
   var items = document.getElementsByClassName('mover');
-  var oldItems = items.cloneNode();
 
   // Calculate scrollTop outside the loop
-  var basePosition = document.body.scrollTop / 1250;
+  var base = document.body.scrollTop / 1250;
+
+  // var oldItems = items.cloneNode();
+
   var updateWorker = new Worker ('js/updateworker.js');
   updateWorker.postMessage(items);
 
@@ -539,13 +541,15 @@ function updatePositions() {
     throw new workerException('Worker Error');
   }
 
-  // for (var i = 0; i < items.length; i++) {
-    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    // Use precalculated mod value
-    // var phase = Math.sin(scrollTop + (i % 5));
 
-    // var phase = Math.sin(basePosition + items[i].mod);
+
+  // for (var i = 0; i < items.length; i++) {
+    // Use precalculated mod value
+    // var phase = Math.sin(base + items[i].mod);
     // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+
+    // var change = items[i].basicLeft + 100 * phase - parseInt(items[i].basicLeft,10);
+    // items[i].style.transform = 'translateX('+change+'px)';
   // }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -579,7 +583,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('movingPizzas1').appendChild(elem);
     // Calculating i mod 5 which is used in updatePositions() function
     elem.mod = (i % 5);
+    elem.style.left = elem.basicLeft+'px';
   }
   // Deleted reference to updatePositions(), which here does not seem necessary here
   // updatePositions();
+
 });

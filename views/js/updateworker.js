@@ -3,11 +3,12 @@ this.onmessage = function(e) {
 
   try {
     for (var i = 0; i < items.length; i++) {
-    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    // Use precalculated mod value
-    // var phase = Math.sin(scrollTop + (i % 5));
-    var phase = Math.sin(basePosition + items[i].mod);
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+      // Use precalculated mod value
+      var phase = Math.sin(base + items[i].mod);
+      // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+
+      var change = items[i].basicLeft + 100 * phase - parseInt(items[i].basicLeft,10);
+      items[i].style.transform = 'translateX('+change+'px)';
     }
     postMessage(items);
   } catch (e) {
