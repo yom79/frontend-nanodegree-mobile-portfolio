@@ -514,7 +514,7 @@ function updatePositions() {
 
   // Replace with a more efficient access to the class Mover
   // var items = document.querySelectorAll('.mover');
-  var items = document.getElementsByClassName('mover')
+  var items = document.getElementsByClassName('mover');
   var oldItems = items.cloneNode();
 
   // Calculate scrollTop outside the loop
