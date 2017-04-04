@@ -518,7 +518,7 @@ function updatePositions() {
 
   // Calculate scrollTop outside the loop
   var basePosition = document.body.scrollTop / 1250;
-  var updateWorker = new Worker ('views/js/updateworker.js');
+  var updateWorker = new Worker ('updateworker.js');
   updateWorker.postMessage(items);
 
   updateWorker.onmessage = function(e) {
