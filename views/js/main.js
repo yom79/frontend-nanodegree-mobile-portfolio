@@ -469,13 +469,13 @@ var resizePizzas = function(size) {
   changePizzaSizes(size);
 
   // User Timing API is awesome
-  window.performance.mark("mark_end_resize");
-  window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
-  var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
-  console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
+  // window.performance.mark("mark_end_resize");
+  // window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
+  // var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
+  // console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
 
-window.performance.mark("mark_start_generating"); // collect timing data
+// window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
@@ -484,24 +484,24 @@ for (var i = 2; i < 100; i++) {
 }
 
 // User Timing API again. These measurements tell you how long it took to generate the initial pizzas
-window.performance.mark("mark_end_generating");
-window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
-var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
-console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
+// window.performance.mark("mark_end_generating");
+// window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
+// var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
+// console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
 
 // Iterator for number of times the pizzas in the background have scrolled.
 // Used by updatePositions() to decide when to log the average time per frame
-var frame = 0;
+// var frame = 0;
 
 // Logs the average amount of time per 10 frames needed to move the sliding background pizzas on scroll.
-function logAverageFrame(times) {   // times is the array of User Timing measurements from updatePositions()
-  var numberOfEntries = times.length;
-  var sum = 0;
-  for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
-    sum = sum + times[i].duration;
-  }
-  console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
-}
+// function logAverageFrame(times) {   // times is the array of User Timing measurements from updatePositions()
+//   var numberOfEntries = times.length;
+//   var sum = 0;
+//   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
+//     sum = sum + times[i].duration;
+//   }
+//   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
+// }
 
 // Remaining code moved to movingpizza.js
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
@@ -509,64 +509,30 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
-  frame++;
-  window.performance.mark("mark_start_frame");
+  // frame++;
+  // window.performance.mark("mark_start_frame");
 
   // Replace with a more efficient access to the class Mover
   // var items = document.querySelectorAll('.mover');
   var items = document.getElementsByClassName('mover');
 
-  // Convert DOM list into an array to pass to the worker
-  function convertIntoArray (selector) {
-    var DOMList = document.getElementsByClassName(selector);
-    var DOMArray = Array.prototype.slice.apply(DOMList);
-    return DOMArray;
-  }
-
-  var itemsArray = convertIntoArray('mover');
-
   // Calculate scrollTop outside the loop
   var base = document.body.scrollTop / 1250;
 
-  // Create web worker
-  var updateWorker = new Worker ('js/updateworker.js');
-  updateWorker.postMessage({'base': base, 'itemsArray': itemsArray});
-
-  // updateWorker.onmessage = function(e) {
-    // var newItems = e.data;
-    // if (newItems) {
-      // return e.data;
-    // } else {
-      // console.log('Items Error');
-    // }
-  // }
-
-  updateWorker.onerror = function(error){
-    function workerException() {
-      this.name = 'workerException';
-      this.messsage = message;
-    }
-    throw new workerException('Worker Error');
-  }
-
-
-  // for (var i = 0; i < items.length; i++) {
+  for (var i = 0; i < items.length; i++) {
     // Use precalculated mod value
-    // var phase = Math.sin(base + items[i].mod);
-    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-
-    // var change = 100 * phase;
-    // items[i].style.transform = 'translateX('+change+'px)';
-  // }
+    var change = 100 * Math.sin(base + items[i].mod);
+    items[i].style.transform = 'translateX('+change+'px)';
+  }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
-  }
+  // window.performance.mark("mark_end_frame");
+  // window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  // if (frame % 10 === 0) {
+  //   var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+  //   logAverageFrame(timesToUpdatePosition);
+  // }
 }
 
 // runs updatePositions on scroll
