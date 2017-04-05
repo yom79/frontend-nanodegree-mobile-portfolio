@@ -1,16 +1,15 @@
 this.onmessage = function(e) {
-  var items = e.data;
+  var base = e.data.base;
+  var itemsArray = e.data.itemsArray;
 
   try {
-    for (var i = 0; i < items.length; i++) {
-      // Use precalculated mod value
-      var phase = Math.sin(base + items[i].mod);
-      // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-
-      var change = items[i].basicLeft + 100 * phase - parseInt(items[i].basicLeft,10);
-      items[i].style.transform = 'translateX('+change+'px)';
+    for (var i = 0; i < itemsArray.length; i++) {
+    // Use precalculated mod value
+    var phase = Math.sin(base + itemsArray[i].mod);
+    var change = 100 * phase;
+    itemsArray[i].style.transform = 'translateX('+change+'px)';
     }
-    postMessage(items);
+    // postMessage(items);
   } catch (e) {
     function itemsException(messsage) {
       this.name = 'itemsException';

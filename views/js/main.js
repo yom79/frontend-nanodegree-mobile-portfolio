@@ -516,22 +516,30 @@ function updatePositions() {
   // var items = document.querySelectorAll('.mover');
   var items = document.getElementsByClassName('mover');
 
+  // Convert DOM list into an array to pass to the worker
+  function convertIntoArray (selector) {
+    var DOMList = document.getElementsByClassName(selector);
+    var DOMArray = Array.prototype.slice.apply(DOMList);
+    return DOMArray;
+  }
+
+  var itemsArray = convertIntoArray('mover');
+
   // Calculate scrollTop outside the loop
   var base = document.body.scrollTop / 1250;
 
-  // var oldItems = items.cloneNode();
-
+  // Create web worker
   var updateWorker = new Worker ('js/updateworker.js');
-  updateWorker.postMessage(items);
+  updateWorker.postMessage({'base': base, 'itemsArray': itemsArray});
 
-  updateWorker.onmessage = function(e) {
-    var newItems = e.data;
-    if (newItems) {
-      return e.data;
-    } else {
-      console.log('Items Error');
-    }
-  }
+  // updateWorker.onmessage = function(e) {
+    // var newItems = e.data;
+    // if (newItems) {
+      // return e.data;
+    // } else {
+      // console.log('Items Error');
+    // }
+  // }
 
   updateWorker.onerror = function(error){
     function workerException() {
@@ -542,13 +550,12 @@ function updatePositions() {
   }
 
 
-
   // for (var i = 0; i < items.length; i++) {
     // Use precalculated mod value
     // var phase = Math.sin(base + items[i].mod);
     // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
 
-    // var change = items[i].basicLeft + 100 * phase - parseInt(items[i].basicLeft,10);
+    // var change = 100 * phase;
     // items[i].style.transform = 'translateX('+change+'px)';
   // }
 
@@ -578,12 +585,14 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    // document.querySelector("#movingPizzas1").appendChild(elem);
-    // Using getElementsById instead of querySelector
-    document.getElementById('movingPizzas1').appendChild(elem);
+
     // Calculating i mod 5 which is used in updatePositions() function
     elem.mod = (i % 5);
     elem.style.left = elem.basicLeft+'px';
+
+    // document.querySelector("#movingPizzas1").appendChild(elem);
+    // Using getElementsById instead of querySelector
+    document.getElementById('movingPizzas1').appendChild(elem);
   }
   // Deleted reference to updatePositions(), which here does not seem necessary here
   // updatePositions();
