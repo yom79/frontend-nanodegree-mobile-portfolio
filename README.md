@@ -1,55 +1,49 @@
-## Website Performance Optimization portfolio project
+# Website Performance Optimization
 
-Your challenge, if you wish to accept it (and we sure hope you will), is to optimize this online portfolio for speed! In particular, optimize the critical rendering path and make this page render as quickly as possible by applying the techniques you've picked up in the [Critical Rendering Path course](https://www.udacity.com/course/ud884).
+This README lists the changes I have made for both parts of the project (index.html and pizza.html).
 
-To get started, check out the repository and inspect the code.
+## Part 1: Optimize PageSpeed Insights score for index.html
 
-### Getting started
+### Achieve a PageSpeed Insights score of 90 for mobile/desktop
 
-#### Part 1: Optimize PageSpeed Insights score for index.html
+My page is being hosted on GitHub (https://yom79.github.io/frontend-nanodegree-mobile-portfolio/). This page gets PageSpeed Insights scores of 93 for mobile/95 for desktop. Changes I have made are as follows.
 
-Some useful tips to help you get started:
+* Inlined minified style.css (minified using CSSO(http://css.github.io/csso/csso.html))
+* Added a media query to each of the remaining CSS files (print and orientation)
+* Changed how font is loaded
+* Added async to loading analytics.js and perfmatters.js
+* Reduced the image file sizes and resized one of the images (I think it was pizzeria.jpg) using grunt (gruntfile.js and package.json are in the same folder as this README)
 
-1. Check out the repository
-1. To inspect the site on your phone, you can run a local server
+## Part 2: Optimize Frames per Second in pizza.html
 
-  ```bash
-  $> cd /path/to/your-project-folder
-  $> python -m SimpleHTTPServer 8080
-  ```
+I am submitting this even though as of this version of change, I am not hitting 60fps on my computer. However, since I don't consistently hit it even without the slider, resizable Pizzas or moving Pizzas, I am wondering if it is an issue with my computer (which is definitely not developer quality) - if not, please suggest additional areas where I should consider modifying.
 
-1. Open a browser and visit localhost:8080
-1. Download and install [ngrok](https://ngrok.com/) to the top-level of your project directory to make your local server accessible remotely.
+### Resizing Pizza (Target: Under 5ms)
 
-  ``` bash
-  $> cd /path/to/your-project-folder
-  $> ./ngrok http 8080
-  ```
+* resizePizzas function
 
-1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! Optional: [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
+  Simplified the calculations of pizza sizes and combined what used to be a few different functions into one.
 
-Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
+* pizza.html
 
-#### Part 2: Optimize Frames per Second in pizza.html
+  Removed the onchange attribute from input, and replaced it with addEventListene in main.js.
 
-To optimize views/pizza.html, you will need to modify views/js/main.js until your frames per second rate is 60 fps or higher. You will find instructive comments in main.js. 
+### Scroll Performance (Target: Consistently hit 60fps)
 
-You might find the FPS Counter/HUD Display useful in Chrome developer tools described here: [Chrome Dev Tools tips-and-tricks](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+* Image files
 
-### Optimization Tips and Tricks
-* [Optimizing Performance](https://developers.google.com/web/fundamentals/performance/ "web performance")
-* [Analyzing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "analyzing crp")
-* [Optimizing the Critical Rendering Path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "optimize the crp!")
-* [Avoiding Rendering Blocking CSS](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "render blocking css")
-* [Optimizing JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [Measuring with Navigation Timing](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api"). We didn't cover the Navigation Timing API in the first two lessons but it's an incredibly useful tool for automated page profiling. I highly recommend reading.
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">The fewer the downloads, the better</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">Reduce the size of text</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">Optimize images</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP caching</a>
+  Optimized two images using FileOptimizer.
 
-### Customization with Bootstrap
-The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework. All custom styles are in `dist/css/portfolio.css` in the portfolio repo.
+* updatePositions function
 
-* <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
+  Tasks originally performed in this function are now split into updatePositions (calculates the positions of moving pizzas), updateScrollTop (stores the current scrollTop), generatingMovingPizza (calculates mod 5, which is used in phase calculations), and requestTick (requests an animation frame).
+
+  querySelectorAll was replaced by getElementsByClassName, and moved declarations of objects to outside the loop where it made sense.
+
+* generateMovingPizza function
+
+  The original code implied placing moving pizzas in a box of a fixed size. Rather than generating a fixed number of moving pizzas, calculated the max number of pizzas (boxes) given the device's screen size. In most instances, the total number of moving pizzas generated is reduced by this change. Also calculated mod 5 at this stage, rather than in updatePositions.
+
+* style.css
+
+  Added will-change to the css for the class 'mover' to place moving pizzas on their own layer.
