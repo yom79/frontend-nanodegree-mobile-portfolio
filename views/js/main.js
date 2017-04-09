@@ -440,7 +440,7 @@ function resizePizzas () {
         console.log("bug in resizePizzas");
     }
   }
-  newSize = sizeSwitcher() * 100 + '%';
+  newSize = sizeSwitcher() * 100 + "%";
 
 // Iterate through all the resizable pizzas and change their size
   for (var i = 0; i < resizablePizza.length; i++) {
@@ -454,7 +454,7 @@ function resizePizzas () {
   console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 }
 
-sizeSlider.addEventListener('change', resizePizzas, {passive: true});
+sizeSlider.addEventListener("change", resizePizzas, {passive: true});
 
 
 // Iterator for number of times the pizzas in the background have scrolled.
@@ -484,18 +484,18 @@ function generateMovingPizza() {
   // Loops over rows (i) and columns (j)
   for (let i = 0; i < Math.floor(window.screen.availHeight/s) + 1; i++) {
     for (let j = 0; j < numCols; j++) {
-      var elem = document.createElement('img');
-      elem.className = 'mover';
+      var elem = document.createElement("img");
+      elem.className = "mover";
       elem.src = "images/pizza.png";
       elem.style.height = "100px";
       elem.style.width = "73.333px";
-      elem.style.top = (i * s) + 'px';
-      elem.style.left = (j * s) + 'px';
+      elem.style.top = (i * s) + "px";
+      elem.style.left = (j * s) + "px";
 
       // Calculate i mod 5 which is used in updatePositions() function
       elem.mod = ((i-1)*numCols + j) % 5;
 
-      document.getElementById('movingPizzas1').appendChild(elem);
+      document.getElementById("movingPizzas1").appendChild(elem);
     }
   updatePositions();
   }
@@ -518,7 +518,7 @@ function requestTick() {
 // Moves the sliding background pizzas based on scroll position
 // Move items declaration to before the updatePositions function, replacing with a more efficient
 // access to the class Mover than querySelectorAll
-var items = document.getElementsByClassName('mover');
+var items = document.getElementsByClassName("mover");
 
 function updatePositions() {
   // frame++;
@@ -527,7 +527,7 @@ function updatePositions() {
   var base = latestScrollY / 1250;
 
   for (var i = 0; i < items.length; i++) {
-    items[i].style.transform = 'translateX('+(100 * Math.sin(base + items[i].mod))+'px)';
+    items[i].style.transform = "translateX(""+(100 * Math.sin(base + items[i].mod))+"px)"";
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -540,7 +540,7 @@ function updatePositions() {
   // }
 }
 
-document.addEventListener('DOMContentLoaded', generateMovingPizza);
+document.addEventListener("DOMContentLoaded", generateMovingPizza);
 
 // Runs updateScrollTop on scroll to keep track of latest scrollTop value and to request animation frame
-window.addEventListener('scroll', updateScrollTop);
+window.addEventListener("scroll", updateScrollTop);
