@@ -10,7 +10,6 @@ My page is being hosted on GitHub (https://yom79.github.io/frontend-nanodegree-m
 
 * Inlined minified style.css (minified using CSSO(http://css.github.io/csso/csso.html))
 * Added a media query to each of the remaining CSS files (print and orientation)
-* Changed how font is loaded
 * Added async to loading analytics.js and perfmatters.js
 * Reduced the image file sizes and resized one of the images (I think it was pizzeria.jpg) using grunt (gruntfile.js and package.json are in the same folder as this README)
 
