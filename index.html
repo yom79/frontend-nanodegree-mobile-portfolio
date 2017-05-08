@@ -8,7 +8,7 @@
     <title>Cameron Pittman: Portfolio</title>
 
     <!-- Hmm, what is the impact of web fonts on speed? Measure it... -->
-    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
     <!--Included the style.css file below instead of linking to it externally-->
 
@@ -19,29 +19,7 @@
     <!-- Added a media query -->
     <link href="css/print.css" rel="stylesheet" media = "print">
     <!-- Added a media query -->
-    <link href="portrait.css" rel="stylesheet" media = "orientation: portrait">
-
-    <!--Loading fonts -->
-    <script>
-    var font1 = new FontFace("Open Sans", "url(https://fonts.googleapis.com/css?family=Open+Sans)", {
-      style: 'normal', unicodeRange:'U+000-5FF', weight:'400'
-    });
-
-    var font2 = new FontFace("Open Sans", "url(https://fonts.googleapis.com/css?family=Open+Sans)", {
-      style: 'bold', unicodeRange:'U+000-5FF', weight: '700'
-    });
-
-    font.load(); // don't wait for the render tree, initiate an immediate fetch!
-
-    font.ready().then(function() {
-      // apply the font (which may re-render text and cause a page reflow)
-      // after the font has finished downloading
-      document.fonts.add(font);
-      document.body.style.fontFamily = "Open Sans, sans-serif";
-
-    });
-    </script>
-
+    <link href="css/portrait.css" rel="stylesheet" media = "orientation: portrait">
 
     <script>
       (function(w,g){w['GoogleAnalyticsObject']=g;
@@ -58,7 +36,7 @@
 
   <body>
     <header>
-      <a href="/"><img src="images/profilepic-40.jpg"></a>
+      <a href="/"><img src="images/profilepic.jpg"></a>
       <p>Cameron Pittman<br><span>Course Developer</span></p>
     </header>
 
