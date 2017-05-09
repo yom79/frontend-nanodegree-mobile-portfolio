@@ -1,17 +1,18 @@
 # Website Performance Optimization
 
-This README lists the changes I have made for both parts of the project (index.html and pizza.html).
+This README lists the changes I have made for both parts of the project (index.html and pizza.html). **To view the pages, double click on index.html.**
 
 ## Part 1: Optimize PageSpeed Insights score for index.html
 
 ### Achieve a PageSpeed Insights score of 90 for mobile/desktop
 
-My page is being hosted on GitHub (https://yom79.github.io/frontend-nanodegree-mobile-portfolio/). This page gets PageSpeed Insights scores of 93 for mobile/95 for desktop. Changes I have made are as follows.
+My page is being hosted on GitHub (https://yom79.github.io/frontend-nanodegree-mobile-portfolio/). This page gets PageSpeed Insights scores of 91 for mobile/93 for desktop. Changes I have made are as follows.
 
 * Inlined minified style.css (minified using CSSO(http://css.github.io/csso/csso.html))
 * Added a media query to each of the remaining CSS files (print and orientation)
 * Added async to loading analytics.js and perfmatters.js
 * Reduced the image file sizes and resized one of the images (I think it was pizzeria.jpg) using grunt (gruntfile.js and package.json are in the same folder as this README)
+* **[change from last submission]** Used FontFaceObserver to load the fonts and added @face-font to go with the change (after getting errors decoding files from Google Fonts). Using FontFaceObsserver (https://fontfaceobserver.com/) in this case only marginally improved (+1 point) PageSpeed Insights score.
 
 ## Part 2: Optimize Frames per Second in pizza.html
 
